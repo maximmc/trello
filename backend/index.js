@@ -248,7 +248,7 @@ app.get('/cards/:userId', async (req, res) => {
 
     try {
         const allCards = await pool.query(
-            "SELECT * FROM card WHERE userId = $1 ORDER BY ord", 
+            "SELECT * FROM card WHERE userId = $1", 
 			[userId]
         )
         res.json(allCards.rows);
