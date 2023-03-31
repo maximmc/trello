@@ -1,24 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+// Packages
+import React, {useState, useEffect} from 'react';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
+import Loading from './Components/Loading.js'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+// Protected Route for Auth
+import ProtectedRoute from './ProtectedRoute.js';
+
+// Context API
+import { UserContext } from './userContext';
+import { AuthContext } from './authContext';
+
+// Page Components
+import Trello from './Trello';
+import Landing from './Landing';
+
+// CSS Imports
+import './App.css';
+import './Components/card.css';
+
+function App( {history} ) {
+  const [userId, setUserId] = useState("Default Value");
+  const [authed, setAuthed] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+      const loggedIn = localStorage.getItem('rememberMe') === 'true';
+      if (loggedIn){
+        setUserId(localStorage.getItem('userId'));
+        setAuthed(true);
+      }    
+
+      setLoading(false);
+    },
+    []);
+
+  
+  return (loading 
+    ?
+      <Loading />
+    :
+      <AuthContext.Provider value={{authed, setAuthed}}>
+      <UserContext.Provider value={{userId, setUserId}}>
+      <BrowserRouter>
+        <Routes>
+            <Route element={<ProtectedRoute />}>
+              <Route element={<Trello/>} path="/home" exact/>
+            </Route>
+            <Route element={<Landing/>} path="/" exact/>
+             
+        </Routes>
+      </BrowserRouter>
+      </UserContext.Provider>
+      </AuthContext.Provider>
   );
 }
 

@@ -129,7 +129,7 @@ app.delete('/logout', function(req, res) {
 	});
 });
 
-// TODO: Реализация CRUD для задач
+// Реализация CRUD для задач
 app.post('/tasks', async (req, res) => {
     try {
         const {taskTitle, taskId, completed, parentId} = req.body;
@@ -149,7 +149,7 @@ app.post('/tasks', async (req, res) => {
 app.get('/tasks', async (req, res) => {
     try {
         const allTasks = await pool.query(
-            "SELECT * FROM Task ORDER BY order"
+            "SELECT * FROM Task ORDER BY ord"
         )
         res.json(allTasks.rows);
     } 
@@ -224,13 +224,18 @@ app.delete("/tasks/:target", async (req, res) => {
 // Реализация CRUD для карточек
 app.post('/cards', async (req, res) => {
     try {
-        const {cardTitle, cardId, userId} = req.body;
+        const {cardTitle, cardId, user_id} = req.body;
+        const sequence = String.raw`CREATE SEQUENCE "${cardId}" START 1`
+
+        const newSeq = await pool.query(
+            sequence
+        );
 
         const newCard = await pool.query(
-            "INSERT INTO card (cardId, cardTitle, userId) VALUES($1, $2, $3) RETURNING *",
-            [cardId, cardTitle, userId]
+            "INSERT INTO card (cardId, cardTitle, userid) VALUES($1, $2, $3) RETURNING *",
+            [cardId, cardTitle, user_id]
         );
-        
+
         res.json(newCard.rows[0]);
     }
     catch (error) {
@@ -243,7 +248,7 @@ app.get('/cards/:userId', async (req, res) => {
 
     try {
         const allCards = await pool.query(
-            "SELECT * FROM card WHERE userId = $1 ORDER BY order", 
+            "SELECT * FROM card WHERE userId = $1 ORDER BY ord", 
 			[userId]
         )
         res.json(allCards.rows);
@@ -290,6 +295,7 @@ app.put("/cards/:target", async (req, res) => {
 app.delete("/cards/:target", async (req, res) => {
     try {
         const {target} = req.params;
+        const sequence = String.raw`DROP SEQUENCE "${target}"`
 
         const deleteCard = await pool.query(
             "DELETE FROM Card WHERE cardId = $1",
@@ -299,13 +305,16 @@ app.delete("/cards/:target", async (req, res) => {
             "DELETE FROM Task WHERE parentId = $1",
             [target]
         );
+
+        const deleteSeq = await pool.query(
+            sequence
+        );
         res.json("Card deleted");
     }
     catch (error) {
         console.error(error);    
     }
 });
-
 
 app.listen(5000, () => {
   console.log("Server has started");

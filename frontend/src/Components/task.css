@@ -1,0 +1,85 @@
+.task {
+    width: 90%;
+    min-height: 2.5rem;
+    background-color: rgb(243, 243, 243);
+    margin: 6px 0;
+    border-radius: .3rem;
+    box-shadow: 0 2px 1px rgba(0, 0, 0, .15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    text-align: left;
+    width: auto;
+    max-width: 75%;
+    line-height: 1.1rem;
+    cursor: pointer;
+    margin: 0.25rem .9rem;
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+.update-task {
+    float: left;
+    border: 1px solid;
+    max-width: 65%;
+    margin-left: 15px;
+    background-color: transparent;
+    border-style: none;
+    outline: none;
+    border-bottom: 1px solid #07B4EE;
+}
+
+.delete {
+    margin: 0 .25px;
+    height: 1.5rem;
+    width: 1.5rem;
+    font-size: .8rem;
+    color: rgb(255, 86, 71);
+    cursor: pointer;
+    font-weight: 600;
+    background-color: transparent;
+    outline: none;
+    border-style: none;
+    border-radius: 20px;
+    transition: 0.5s;
+}
+
+.delete:hover {
+    background-color: rgba(220, 73, 60, .35);
+
+}
+
+.buttons {
+    height: 95%;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.edit-task {
+    margin: 0 .25px;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+    color: #0F1F2A;
+    outline: none;
+    border-radius: 20px;
+    border-style: none;
+    background-color: transparent;
+    background-image: url('../Icons/icons8-edit.svg');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: 0.5s;
+}
+
+.edit-task:hover {
+    background-color: rgba(7, 180, 238, 0.5);
+}
+
+.update-form {
+    margin: 0;
+}
